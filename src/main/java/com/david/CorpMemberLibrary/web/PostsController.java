@@ -36,6 +36,20 @@ public class PostsController {
     private final PostsService postsService;
     
     /**
+     * 루트 경로 리다이렉트
+     * 
+     * @GetMapping: HTTP GET 요청을 처리
+     * "/" 경로로 GET 요청이 오면 게시글 목록 페이지로 리다이렉트
+     * 
+     * @return 리다이렉트 경로 (게시글 목록 페이지)
+     */
+    @GetMapping("/")  // GET / 요청 처리
+    public String index() {
+        // 루트 경로 접속 시 게시글 목록 페이지로 리다이렉트
+        return "redirect:/posts";
+    }
+    
+    /**
      * 게시글 작성 폼 페이지
      * 
      * @GetMapping: HTTP GET 요청을 처리

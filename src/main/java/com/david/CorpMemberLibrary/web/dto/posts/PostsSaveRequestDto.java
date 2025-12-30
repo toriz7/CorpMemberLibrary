@@ -1,7 +1,9 @@
 package com.david.CorpMemberLibrary.web.dto.posts;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 게시글 저장 요청 DTO (Data Transfer Object)
@@ -13,7 +15,9 @@ import lombok.NoArgsConstructor;
  * 3. API 스펙 변경 시 Entity 수정 없이 DTO만 수정 가능
  */
 @Getter  // Lombok: 모든 필드에 대한 getter 메서드 자동 생성
+@Setter  // Lombok: 모든 필드에 대한 setter 메서드 자동 생성 (Spring MVC 폼 바인딩에 필요)
 @NoArgsConstructor  // Lombok: 기본 생성자 자동 생성
+@AllArgsConstructor  // Lombok: 모든 필드를 파라미터로 받는 생성자 자동 생성
 public class PostsSaveRequestDto {
     
     /**
@@ -33,19 +37,5 @@ public class PostsSaveRequestDto {
      * 클라이언트로부터 받아서 저장할 작성자 데이터
      */
     private String author;
-    
-    /**
-     * 모든 필드를 받는 생성자
-     * 
-     * @param title 게시글 제목
-     * @param content 게시글 내용
-     * @param author 게시글 작성자
-     */
-    public PostsSaveRequestDto(String title, String content, String author) {
-        // 생성자를 통해 필드 초기화
-        this.title = title;
-        this.content = content;
-        this.author = author;
-    }
 }
 
