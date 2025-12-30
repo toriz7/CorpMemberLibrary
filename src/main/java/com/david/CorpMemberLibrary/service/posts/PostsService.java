@@ -42,12 +42,15 @@ public class PostsService {
     /**
      * 게시글 저장 메서드
      * 
-     * @Transactional이 없는 이유:
-     * JpaRepository의 save() 메서드가 이미 트랜잭션을 포함하고 있기 때문
+     * @Transactional 어노테이션:
+     * - 이 메서드가 실행되는 동안 하나의 트랜잭션으로 묶임
+     * - 메서드 실행 중 예외 발생 시 모든 변경사항이 롤백됨
+     * - 데이터 일관성 보장
      * 
      * @param requestDto 저장할 게시글 데이터
      * @return 저장된 게시글의 ID
      */
+    @Transactional  // Spring: 이 메서드를 트랜잭션으로 묶음
     public Long save(PostsSaveRequestDto requestDto) {
         // DTO를 Entity로 변환
         // Builder 패턴을 사용하여 Entity 생성
