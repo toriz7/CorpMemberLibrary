@@ -2,9 +2,9 @@ package com.david.CorpMemberLibrary.service.posts;
 
 import com.david.CorpMemberLibrary.domain.posts.Posts;
 import com.david.CorpMemberLibrary.domain.posts.PostsRepository;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsResponseDto;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsSaveRequestDto;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsUpdateRequestDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsResponseDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsSaveRequestDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

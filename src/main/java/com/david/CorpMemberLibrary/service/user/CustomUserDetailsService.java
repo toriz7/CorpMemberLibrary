@@ -46,9 +46,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // UserService를 통해 데이터베이스에서 사용자 조회
+        // Spring Security의 loadUserByUsername은 username 파라미터를 받지만,
+        // 실제로는 userId로 조회합니다.
         User user;
         try {
-            user = userService.findByUsername(username);
+            user = userService.findByUserId(username);
         } catch (IllegalArgumentException e) {
             // UserService가 던진 IllegalArgumentException을 UsernameNotFoundException으로 변환
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username, e);

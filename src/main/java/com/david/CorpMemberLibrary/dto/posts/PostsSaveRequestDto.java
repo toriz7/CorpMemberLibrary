@@ -1,4 +1,4 @@
-package com.david.CorpMemberLibrary.web.dto.posts;
+package com.david.CorpMemberLibrary.dto.posts;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -34,26 +34,26 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // - Long: 엔티티의 ID 타입
 
     /**
-     * 사용자명(username)으로 사용자 조회
+     * 사용자 ID(userId)로 사용자 조회
      * Spring Data JPA가 메서드 이름을 분석하여 자동으로 쿼리를 생성합니다.
      * 
-     * @param username 조회할 사용자명
+     * @param userId 조회할 사용자 ID
      * @return Optional<User> 사용자가 존재하면 User 객체, 없으면 empty
      * 
      * 생성되는 쿼리:
-     * SELECT * FROM users WHERE username = ?
+     * SELECT * FROM users WHERE user_id = ?
      */
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUserId(String userId);
 
     /**
-     * 사용자명(username)이 이미 존재하는지 확인
+     * 사용자 ID(userId)가 이미 존재하는지 확인
      * 
-     * @param username 확인할 사용자명
+     * @param userId 확인할 사용자 ID
      * @return 존재하면 true, 없으면 false
      * 
      * 생성되는 쿼리:
-     * SELECT COUNT(*) > 0 FROM users WHERE username = ?
+     * SELECT COUNT(*) > 0 FROM users WHERE user_id = ?
      */
-    boolean existsByUsername(String username);
+    boolean existsByUserId(String userId);
 }
 

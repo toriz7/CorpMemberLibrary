@@ -47,7 +47,7 @@ public class UserService {
      * - 메서드 실행 중 예외 발생 시 모든 변경사항이 롤백됨
      * - 데이터 일관성 보장
      * 
-     * @param username 사용자명 (로그인 아이디)
+     * @param userId 사용자명 (로그인 아이디)
      * @param password 평문 비밀번호 (암호화되어 저장됨)
      * @param name 사용자 실명
      * @param position 사용자 직책
@@ -56,9 +56,9 @@ public class UserService {
      */
     @Transactional  // Spring: 이 메서드를 트랜잭션으로 묶음
     public Long signup(String userId, String password, String name, String position) {
-        // 사용자명 중복 확인
-        if (userRepository.existsByUsername(userId)) {
-            throw new IllegalArgumentException("이미 존재하는 사용자명입니다: " + userId);
+        // 사용자 ID 중복 확인
+        if (userRepository.existsByUserId(userId)) {
+            throw new IllegalArgumentException("이미 존재하는 사용자 ID입니다: " + userId);
         }
         
         // 평문 비밀번호를 BCrypt로 암호화
@@ -85,18 +85,18 @@ public class UserService {
     }
     
     /**
-     * 사용자명으로 사용자 조회 메서드
+     * 사용자 ID로 사용자 조회 메서드
      * 
-     * @param username 조회할 사용자명
+     * @param userId 조회할 사용자 ID
      * @return User 엔티티
      * @throws IllegalArgumentException 사용자가 존재하지 않을 때
      */
-    public User findByUsername(String username) {
+    public User findByUserId(String userId) {
         // 데이터베이스에서 사용자 조회
-        // findByUsername()은 Optional<User>를 반환하므로 orElseThrow()로 예외 처리
-        return userRepository.findByUsername(username)
+        // findByUserId()는 Optional<User>를 반환하므로 orElseThrow()로 예외 처리
+        return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "해당 사용자가 없습니다. username=" + username));
+                        "해당 사용자가 없습니다. userId=" + userId));
     }
     
     /**

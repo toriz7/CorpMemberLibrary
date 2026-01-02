@@ -1,9 +1,9 @@
 package com.david.CorpMemberLibrary.web;
 
 import com.david.CorpMemberLibrary.service.posts.PostsService;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsResponseDto;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsSaveRequestDto;
-import com.david.CorpMemberLibrary.web.dto.posts.PostsUpdateRequestDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsResponseDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsSaveRequestDto;
+import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
