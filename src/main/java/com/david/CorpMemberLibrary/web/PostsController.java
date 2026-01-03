@@ -5,6 +5,8 @@ import com.david.CorpMemberLibrary.dto.posts.PostsResponseDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsSaveRequestDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +41,26 @@ public class PostsController {
      * 루트 경로 리다이렉트
      * 
      * @GetMapping: HTTP GET 요청을 처리
-     * "/" 경로로 GET 요청이 오면 게시글 목록 페이지로 리다이렉트
+     * "/" 경로로 GET 요청이 오면 로그인 상태를 체크하여
+     * - 로그인되어 있으면: 게시글 목록 페이지로 리다이렉트
+     * - 로그인되어 있지 않으면: 로그인 페이지로 리다이렉트
      * 
-     * @return 리다이렉트 경로 (게시글 목록 페이지)
+     * @return 리다이렉트 경로 (로그인 페이지 또는 게시글 목록 페이지)
      */
     @GetMapping("/")  // GET / 요청 처리
     public String index() {
-        // 루트 경로 접속 시 게시글 목록 페이지로 리다이렉트
-        return "redirect:/posts";
+        // Spring Security에서 현재 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // 인증되어 있고, 익명 사용자가 아닌 경우 (로그인된 사용자)
+        if (authentication != null && authentication.isAuthenticated() 
+                && !authentication.getName().equals("anonymousUser")) {
+            // 로그인되어 있으면 게시글 목록 페이지로 리다이렉트
+            return "redirect:/posts";
+        } else {
+            // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+            return "redirect:/login";
+        }
     }
     
     /**

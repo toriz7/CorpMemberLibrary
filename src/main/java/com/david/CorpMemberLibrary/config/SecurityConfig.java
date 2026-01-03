@@ -55,13 +55,16 @@ public class SecurityConfig {
             
             // HTTP 요청에 대한 권한 설정
             .authorizeHttpRequests(auth -> auth
-                // 정적 리소스와 공개 경로는 인증 없이 접근 가능
-                .requestMatchers("/", "/posts", "/posts/**", "/h2-console/**").permitAll()
+                // 루트 경로는 인증 없이 접근 가능 (로그인 상태 체크 후 리다이렉트)
+                .requestMatchers("/").permitAll()
+                // H2 콘솔은 인증 없이 접근 가능 (개발 환경용)
+                .requestMatchers("/h2-console/**").permitAll()
                 // 회원가입 페이지와 처리 경로는 인증 없이 접근 가능
                 .requestMatchers("/signup", "/signup/**").permitAll()
                 // 로그인 페이지는 인증 없이 접근 가능
                 .requestMatchers("/login", "/login/**").permitAll()
-                // 그 외 모든 경로는 인증이 필요
+                // 게시글 관련 경로는 인증이 필요 (로그인된 사용자만 접근 가능)
+                // 그 외 모든 경로도 인증이 필요
                 .anyRequest().authenticated()
             )
             
@@ -78,7 +81,7 @@ public class SecurityConfig {
             // 로그아웃 설정
             .logout(logout -> logout
                 .logoutUrl("/logout")  // 로그아웃 처리 경로
-                .logoutSuccessUrl("/posts")  // 로그아웃 성공 시 리다이렉트할 경로
+                .logoutSuccessUrl("/login")  // 로그아웃 성공 시 로그인 페이지로 리다이렉트
                 .invalidateHttpSession(true)  // 세션 무효화
                 .deleteCookies("JSESSIONID")  // 쿠키 삭제
                 .permitAll()  // 로그아웃은 모든 사용자 접근 가능
