@@ -1,5 +1,6 @@
 package com.david.CorpMemberLibrary.domain.user;
 
+import com.david.CorpMemberLibrary.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor  // Lombok: 기본 생성자 자동 생성 (JPA 필수)
 @Entity  // JPA: 이 클래스를 엔티티로 지정
 @Table(name = "users")  // JPA: 데이터베이스 테이블명을 "users"로 지정
-public class User {
+public class User extends BaseTimeEntity {
 
     /**
      * 사용자 고유 ID (기본키)

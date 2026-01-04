@@ -1,5 +1,6 @@
 package com.david.CorpMemberLibrary.domain.posts;
 
+import com.david.CorpMemberLibrary.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor  // Lombok: 기본 생성자 자동 생성 (JPA 필수)
 @Entity  // JPA: 이 클래스를 엔티티로 지정
 @Table(name = "posts")  // JPA: 데이터베이스 테이블명을 "posts"로 지정
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     /**
      * 게시글 고유 ID (기본키)

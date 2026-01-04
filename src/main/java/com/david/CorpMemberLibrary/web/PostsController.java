@@ -4,11 +4,13 @@ import com.david.CorpMemberLibrary.service.posts.PostsService;
 import com.david.CorpMemberLibrary.dto.posts.PostsResponseDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsSaveRequestDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -139,46 +141,34 @@ public class PostsController {
         return "posts/posts-update";
     }
     
-    /**
-     * 게시글 저장 처리 (POST 요청)
-     * 
-     * @PostMapping: HTTP POST 요청을 처리
-     * @ModelAttribute: HTML 폼에서 전송된 데이터를 DTO로 자동 변환
-     * 
-     * @param requestDto 저장할 게시글 데이터
-     * @return 리다이렉트 경로 (저장 후 목록 페이지로 이동)
-     */
-    @PostMapping("/posts/save")  // POST /posts/save 요청 처리
-    public String save(PostsSaveRequestDto requestDto) {
-        // Service를 통해 게시글 저장
-        // 저장된 게시글의 ID를 반환받지만, 여기서는 사용하지 않음
+    @PostMapping("/posts/save")
+    public String save(@Valid PostsSaveRequestDto requestDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "posts/posts-save";
+        }
+
         postsService.save(requestDto);
-        
-        // 저장 후 게시글 목록 페이지로 리다이렉트
-        // "redirect:"를 붙이면 해당 경로로 리다이렉트됨
         return "redirect:/posts";
     }
     
-    /**
-     * 게시글 수정 처리 (POST 요청)
-     * 
-     * @param requestDto 수정할 게시글 데이터
-     * @return 리다이렉트 경로 (수정 후 상세 페이지로 이동)
-     */
-    @PostMapping("/posts/update/{id}")  // POST /posts/update/{id} 요청 처리
-    public String update(@PathVariable Long id, PostsUpdateRequestDto requestDto) {
-        // URL에서 받은 ID를 DTO에 설정
+    @PostMapping("/posts/update/{id}")
+    public String update(@PathVariable Long id, @Valid PostsUpdateRequestDto requestDto,
+                        BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            model.addAttribute("post", postsService.findById(id));
+            return "posts/posts-update";
+        }
+
         requestDto = new PostsUpdateRequestDto(
-                id,  // URL에서 받은 ID
-                requestDto.getTitle(),  // 폼에서 받은 제목
-                requestDto.getContent(),  // 폼에서 받은 내용
-                requestDto.getAuthor()  // 폼에서 받은 작성자
+                id,
+                requestDto.getTitle(),
+                requestDto.getContent(),
+                requestDto.getAuthor()
         );
-        
-        // Service를 통해 게시글 수정
+
         Long updatedId = postsService.update(requestDto);
-        
-        // 수정 후 해당 게시글의 상세 페이지로 리다이렉트
         return "redirect:/posts/" + updatedId;
     }
     

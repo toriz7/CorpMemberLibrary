@@ -1,5 +1,6 @@
 package com.david.CorpMemberLibrary.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,30 +9,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Spring Security 설정 클래스
- * 
- * @Configuration: Spring이 이 클래스를 설정 클래스로 인식
- * @EnableWebSecurity: Spring Security 웹 보안 기능 활성화
- */
-@Configuration  // Spring: 이 클래스를 설정 클래스로 등록
-@EnableWebSecurity  // Spring Security: 웹 보안 기능 활성화
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${spring.h2.console.enabled:false}")
+    private boolean h2ConsoleEnabled;
     
-    /**
-     * 비밀번호 암호화를 위한 PasswordEncoder 빈 등록
-     * 
-     * BCryptPasswordEncoder는 BCrypt 해시 알고리즘을 사용하여 비밀번호를 암호화합니다.
-     * - 기본 강도(strength)는 10입니다.
-     * - 같은 비밀번호라도 매번 다른 해시 값이 생성됩니다 (솔트 자동 생성).
-     * - 단방향 해시 함수로, 원본 비밀번호를 복원할 수 없습니다.
-     * 
-     * @return BCryptPasswordEncoder 인스턴스
-     */
-    @Bean  // Spring: 이 메서드가 반환하는 객체를 빈으로 등록
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-        // 더 강한 암호화를 원하면: new BCryptPasswordEncoder(12)
     }
     
     /**
@@ -88,15 +75,20 @@ public class SecurityConfig {
             )
             
             // CSRF 보호 설정
-            // H2 콘솔 사용을 위해 일시적으로 비활성화 (프로덕션에서는 활성화해야 함)
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/h2-console/**")
-            )
-            
+            .csrf(csrf -> {
+                if (h2ConsoleEnabled) {
+                    // 개발 환경: H2 콘솔을 위해 CSRF 비활성화
+                    csrf.ignoringRequestMatchers("/h2-console/**");
+                }
+            })
+
             // H2 콘솔 사용을 위한 프레임 옵션 설정
-            .headers(headers -> headers
-                .frameOptions(frame -> frame.sameOrigin())
-            );
+            .headers(headers -> {
+                if (h2ConsoleEnabled) {
+                    // 개발 환경: H2 콘솔을 위해 프레임 옵션 허용
+                    headers.frameOptions(frame -> frame.sameOrigin());
+                }
+            });
         
         return http.build();
     }
