@@ -18,6 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignupRequestDto {
 
+
     @NotBlank(message = "사번은 필수입니다")
     @Size(max = 50, message = "사번은 50자를 초과할 수 없습니다")
     private String userId;
