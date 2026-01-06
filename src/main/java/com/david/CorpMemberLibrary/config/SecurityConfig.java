@@ -1,5 +1,7 @@
 package com.david.CorpMemberLibrary.config;
 
+import com.david.CorpMemberLibrary.config.auth.CustomAuthenticationFailureHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +13,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
     @Value("${spring.h2.console.enabled:false}")
     private boolean h2ConsoleEnabled;
@@ -50,16 +55,18 @@ public class SecurityConfig {
                 .requestMatchers("/signup", "/signup/**").permitAll()
                 // 로그인 페이지는 인증 없이 접근 가능
                 .requestMatchers("/login", "/login/**").permitAll()
+                // 관리자 페이지는 ADMIN 권한만 접근 가능
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 // 게시글 관련 경로는 인증이 필요 (로그인된 사용자만 접근 가능)
                 // 그 외 모든 경로도 인증이 필요
                 .anyRequest().authenticated()
             )
-            
+
             // 로그인 설정
             .formLogin(form -> form
                 .loginPage("/login")  // 커스텀 로그인 페이지 경로
                 .defaultSuccessUrl("/posts", true)  // 로그인 성공 시 리다이렉트할 경로
-                .failureUrl("/login?error=true")  // 로그인 실패 시 리다이렉트할 경로
+                .failureHandler(authenticationFailureHandler)  // 커스텀 로그인 실패 핸들러
                 .usernameParameter("username")  // 로그인 폼의 사용자명 필드명
                 .passwordParameter("password")  // 로그인 폼의 비밀번호 필드명
                 .permitAll()  // 로그인 페이지는 모든 사용자 접근 가능

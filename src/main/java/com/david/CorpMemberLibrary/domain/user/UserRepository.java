@@ -2,6 +2,7 @@ package com.david.CorpMemberLibrary.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,13 +48,46 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * 사용자 ID(userId)가 이미 존재하는지 확인
-     * 
+     *
      * @param userId 확인할 사용자 ID
      * @return 존재하면 true, 없으면 false
-     * 
+     *
      * 생성되는 쿼리:
      * SELECT COUNT(*) > 0 FROM users WHERE user_id = ?
      */
     boolean existsByUserId(String userId);
+
+    /**
+     * 특정 상태의 사용자 목록 조회
+     *
+     * @param status 조회할 사용자 상태 (PENDING, APPROVED, REJECTED)
+     * @return 해당 상태의 사용자 목록
+     *
+     * 생성되는 쿼리:
+     * SELECT * FROM users WHERE status = ?
+     */
+    List<User> findByStatus(UserStatus status);
+
+    /**
+     * 특정 상태의 사용자 목록을 가입일 역순으로 조회
+     *
+     * @param status 조회할 사용자 상태
+     * @return 해당 상태의 사용자 목록 (최신 가입순)
+     *
+     * 생성되는 쿼리:
+     * SELECT * FROM users WHERE status = ? ORDER BY created_date DESC
+     */
+    List<User> findByStatusOrderByCreatedDateDesc(UserStatus status);
+
+    /**
+     * 특정 상태의 사용자 수 조회
+     *
+     * @param status 조회할 사용자 상태
+     * @return 해당 상태의 사용자 수
+     *
+     * 생성되는 쿼리:
+     * SELECT COUNT(*) FROM users WHERE status = ?
+     */
+    long countByStatus(UserStatus status);
 }
 

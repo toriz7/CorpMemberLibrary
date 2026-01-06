@@ -60,6 +60,15 @@ public class User extends BaseTimeEntity {
     private String role = "USER";
 
     /**
+     * 사용자 승인 상태
+     * 회원가입 후 관리자 승인을 받아야 로그인이 가능합니다.
+     * 기본값은 PENDING(승인대기)입니다.
+     */
+    @Enumerated(EnumType.STRING)  // JPA: Enum을 문자열로 저장
+    @Column(nullable = false, length = 20)
+    private UserStatus status = UserStatus.PENDING;
+
+    /**
      * 빌더 패턴을 사용한 생성자
      * @Builder 어노테이션으로 빌더 클래스가 자동 생성됩니다.
      * 
@@ -73,11 +82,36 @@ public class User extends BaseTimeEntity {
      *     .build();
      */
     @Builder  // Lombok: 빌더 패턴 자동 생성
-    public User(String userId, String password, String name, String position, String role) {
+    public User(String userId, String password, String name, String position, String role, UserStatus status) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.position = position;
         this.role = role;
+        this.status = status != null ? status : UserStatus.PENDING;
+    }
+
+    /**
+     * 사용자 승인 처리
+     * PENDING 상태에서 APPROVED 상태로 변경합니다.
+     */
+    public void approve() {
+        this.status = UserStatus.APPROVED;
+    }
+
+    /**
+     * 사용자 승인 거부 처리
+     * PENDING 상태에서 REJECTED 상태로 변경합니다.
+     */
+    public void reject() {
+        this.status = UserStatus.REJECTED;
+    }
+
+    /**
+     * 사용자가 승인된 상태인지 확인
+     * @return 승인된 상태이면 true
+     */
+    public boolean isApproved() {
+        return this.status == UserStatus.APPROVED;
     }
 }
