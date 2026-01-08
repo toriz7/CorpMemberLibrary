@@ -40,13 +40,13 @@ public class PostsController {
     private final PostsService postsService;
     
     /**
-     * 루트 경로 리다이렉트
-     * 
+     * 메인(인덱스) 페이지
+     *
      * @GetMapping: HTTP GET 요청을 처리
      * "/" 경로로 GET 요청이 오면 로그인 상태를 체크하여
      * - 로그인되어 있으면: 게시글 목록 페이지로 리다이렉트
      * - 로그인되어 있지 않으면: 로그인 페이지로 리다이렉트
-     * 
+     *
      * @return 리다이렉트 경로 (로그인 페이지 또는 게시글 목록 페이지)
      */
     @GetMapping("/")  // GET / 요청 처리
@@ -78,6 +78,7 @@ public class PostsController {
         // 게시글 작성 폼 페이지로 이동
         return "posts/posts-save";
     }
+
     
     /**
      * 게시글 목록 페이지
