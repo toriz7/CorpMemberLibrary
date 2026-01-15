@@ -64,7 +64,7 @@ public class IndexController {
             return "redirect:/login";
         }
     }
-
+    
     /**
      * 게시글 작성 폼 페이지
      *
