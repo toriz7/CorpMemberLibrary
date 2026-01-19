@@ -2,7 +2,6 @@ package com.david.CorpMemberLibrary.config;
 
 import com.david.CorpMemberLibrary.config.auth.CustomAuthenticationFailureHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,9 +17,6 @@ public class SecurityConfig {
 
     private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
-    @Value("${spring.h2.console.enabled:false}")
-    private boolean h2ConsoleEnabled;
-    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -49,8 +45,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 루트 경로는 인증 없이 접근 가능 (로그인 상태 체크 후 리다이렉트)
                 .requestMatchers("/").permitAll()
-                // H2 콘솔은 인증 없이 접근 가능 (개발 환경용)
-                .requestMatchers("/h2-console/**").permitAll()
                 // 회원가입 페이지와 처리 경로는 인증 없이 접근 가능
                 .requestMatchers("/signup", "/signup/**").permitAll()
                 // 로그인 페이지는 인증 없이 접근 가능
@@ -79,24 +73,8 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)  // 세션 무효화
                 .deleteCookies("JSESSIONID")  // 쿠키 삭제
                 .permitAll()  // 로그아웃은 모든 사용자 접근 가능
-            )
-            
-            // CSRF 보호 설정
-            .csrf(csrf -> {
-                if (h2ConsoleEnabled) {
-                    // 개발 환경: H2 콘솔을 위해 CSRF 비활성화
-                    csrf.ignoringRequestMatchers("/h2-console/**");
-                }
-            })
+            );
 
-            // H2 콘솔 사용을 위한 프레임 옵션 설정
-            .headers(headers -> {
-                if (h2ConsoleEnabled) {
-                    // 개발 환경: H2 콘솔을 위해 프레임 옵션 허용
-                    headers.frameOptions(frame -> frame.sameOrigin());
-                }
-            });
-        
         return http.build();
     }
 }

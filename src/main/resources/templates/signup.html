@@ -75,18 +75,22 @@
 
                 <!-- 직책 -->
                 <div class="mb-3">
-                    <label for="position" class="form-label">직책<span class="required">*</span></label>
-                    <select class="form-select" id="position">
-                        <option value ="Examiner">검사역</option>
-                        <option value ="Senior">선임</option>
-                        <option value ="Chief">수석</option>
+                    <label for="position" class="form-label">직책 <span class="required">*</span></label>
+                    <select class="form-select" id="position" th:field="*{position}">
+                        <option value="Examiner">검사역</option>
+                        <option value="Senior">선임</option>
+                        <option value="Chief">수석</option>
                     </select>
-                    <!--
-                    <input type="text" class="form-control" id="position" th:field="*{position}"
-                           placeholder="직책을 입력하세요"
-                           th:classappend="${#fields.hasErrors('position')} ? 'is-invalid'">
-                    -->
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+                </div>
+
+                <!-- 부서 -->
+                <div class="mb-3">
+                    <label for="dept" class="form-label">부서</label>
+                    <input type="text" class="form-control" id="dept" th:field="*{dept}"
+                           placeholder="부서를 입력하세요"
+                           th:classappend="${#fields.hasErrors('dept')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dept')}" th:errors="*{dept}"></div>
                 </div>
 
                 <!-- CSRF 토큰 -->

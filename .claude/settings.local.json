@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gradlew.bat build:*)",
+      "Bash(cmd.exe /c \"gradlew.bat build\")",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\Users\\\\FA\\\\IdeaProjects\\\\CorpMemberLibrary''; .\\\\gradlew.bat build\")",
+      "Bash(powershell.exe -Command \"Remove-Item ''C:\\\\Users\\\\FA\\\\IdeaProjects\\\\CorpMemberLibrary\\\\src\\\\main\\\\java\\\\com\\\\david\\\\CorpMemberLibrary\\\\domain\\\\user\\\\UserStatus.java''\")",
+      "Bash(powershell.exe -Command:*)"
+    ]
+  }
+}
