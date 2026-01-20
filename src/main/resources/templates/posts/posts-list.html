@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>게시글 목록</title>
@@ -8,13 +9,31 @@
 </head>
 <body>
     <div class="container mt-5">
-        <!-- 페이지 제목 -->
-        <h1 class="mb-4">게시글 목록</h1>
-        
+        <!-- 상단 메뉴 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">게시글 목록</h1>
+            <div>
+                <!-- 관리자 메뉴 (ADMIN 권한만 표시) -->
+                <div sec:authorize="hasRole('ADMIN')" class="btn-group me-2">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        관리자 메뉴
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/admin/users/pending}">승인 대기 사용자</a></li>
+                        <li><a class="dropdown-item" th:href="@{/admin/users}">전체 사용자 관리</a></li>
+                    </ul>
+                </div>
+                <!-- 로그아웃 버튼 -->
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-danger">로그아웃</button>
+                </form>
+            </div>
+        </div>
+
         <!-- 게시글 작성 버튼 -->
         <div class="mb-3">
-            <!-- Thymeleaf URL 링크: @{/posts/save}는 /posts/save로 변환됨 -->
-            <a th:href="@{/posts/save}" class="btn btn-primary">게시글 작성</a>
+            <!-- Thymeleaf URL 링크: @{/write-posts}는 /write-posts로 변환됨 -->
+            <a th:href="@{/write-posts}" class="btn btn-primary">게시글 작성</a>
         </div>
         
         <!-- 게시글 목록 테이블 -->

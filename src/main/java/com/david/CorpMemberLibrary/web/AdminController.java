@@ -32,4 +32,55 @@ public class AdminController {
         model.addAttribute("users", users);
         return "admin/users-list";
     }
+
+    /**
+     * 승인 대기 사용자 목록 페이지
+     *
+     * @param model 뷰에 데이터를 전달하기 위한 Model 객체
+     * @return 뷰 이름 (templates/admin/users-pending.html)
+     */
+    @GetMapping("/users/pending")
+    public String pendingUsers(Model model) {
+        List<User> pendingUsers = userService.findPendingUsers();
+        long pendingCount = userService.countPendingUsers();
+        model.addAttribute("pendingUsers", pendingUsers);
+        model.addAttribute("pendingCount", pendingCount);
+        return "admin/users-pending";
+    }
+
+    /**
+     * 사용자 승인 처리
+     *
+     * @param userId 승인할 사용자 ID
+     * @return 승인 대기 목록 페이지로 리다이렉트
+     */
+    @PostMapping("/users/{userId}/approve")
+    public String approveUser(@PathVariable String userId,
+                              org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        try {
+            userService.approveUser(userId);
+            redirectAttributes.addFlashAttribute("successMessage", userId + " 사용자가 승인되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "승인 처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return "redirect:/admin/users/pending";
+    }
+
+    /**
+     * 사용자 거부 처리
+     *
+     * @param userId 거부할 사용자 ID
+     * @return 승인 대기 목록 페이지로 리다이렉트
+     */
+    @PostMapping("/users/{userId}/reject")
+    public String rejectUser(@PathVariable String userId,
+                             org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        try {
+            userService.rejectUser(userId);
+            redirectAttributes.addFlashAttribute("successMessage", userId + " 사용자가 거부되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "거부 처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return "redirect:/admin/users/pending";
+    }
 }

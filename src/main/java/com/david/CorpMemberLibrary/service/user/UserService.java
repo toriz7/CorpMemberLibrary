@@ -83,4 +83,44 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "해당 사용자가 없습니다. id=" + id));
     }
+
+    /**
+     * 승인 대기 중인 사용자 목록 조회
+     *
+     * @return PENDING 상태의 사용자 목록
+     */
+    public List<User> findPendingUsers() {
+        return userRepository.findByStatus("PENDING");
+    }
+
+    /**
+     * 승인 대기 중인 사용자 수 조회
+     *
+     * @return PENDING 상태의 사용자 수
+     */
+    public long countPendingUsers() {
+        return userRepository.countByStatus("PENDING");
+    }
+
+    /**
+     * 사용자 승인 처리
+     *
+     * @param userId 승인할 사용자 ID
+     */
+    @Transactional
+    public void approveUser(String userId) {
+        User user = findById(userId);
+        user.updateStatus("APPROVED");
+    }
+
+    /**
+     * 사용자 거부 처리
+     *
+     * @param userId 거부할 사용자 ID
+     */
+    @Transactional
+    public void rejectUser(String userId) {
+        User user = findById(userId);
+        user.updateStatus("REJECTED");
+    }
 }

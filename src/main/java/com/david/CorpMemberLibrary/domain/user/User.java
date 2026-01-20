@@ -63,18 +63,34 @@ public class User {
     @Column(name = "CreatedAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * 사용자 상태
+     * PENDING: 승인 대기, APPROVED: 승인됨, REJECTED: 거절됨
+     */
+    @Column(name = "Status", length = 20, nullable = false)
+    private String status = "PENDING";
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
     @Builder
-    public User(String userId, String password, String name, String position, String role, String dept) {
+    public User(String userId, String password, String name, String position, String role, String dept, String status) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.position = position;
         this.role = role != null ? role : "USER";
         this.dept = dept;
+        this.status = status != null ? status : "PENDING";
+    }
+
+    /**
+     * 사용자 상태 변경 메서드
+     * @param status 변경할 상태 (PENDING, APPROVED, REJECTED)
+     */
+    public void updateStatus(String status) {
+        this.status = status;
     }
 }

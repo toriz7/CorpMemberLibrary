@@ -40,6 +40,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUserId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username));
 
+        // PENDING 상태인 사용자는 로그인 차단
+        if ("PENDING".equals(user.getStatus())) {
+            throw new UsernameNotFoundException("승인 대기 중인 계정입니다. 관리자 승인 후 로그인이 가능합니다.");
+        }
+
         // 사용자의 권한(role)을 GrantedAuthority 리스트로 변환
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));

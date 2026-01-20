@@ -71,6 +71,7 @@ public class SignupRequestDto {
                 .position(position)
                 .dept(dept)
                 .role("USER")
+                .status("PENDING")
                 .build();
     }
 }

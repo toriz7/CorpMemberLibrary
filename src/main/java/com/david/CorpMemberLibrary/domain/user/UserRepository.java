@@ -2,6 +2,7 @@ package com.david.CorpMemberLibrary.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,4 +33,20 @@ public interface UserRepository extends JpaRepository<User, String> {
      * @return 존재하면 true, 없으면 false
      */
     boolean existsByUserId(String userId);
+
+    /**
+     * 상태(status)로 사용자 목록 조회
+     *
+     * @param status 조회할 상태 (PENDING, APPROVED, REJECTED)
+     * @return 해당 상태의 사용자 목록
+     */
+    List<User> findByStatus(String status);
+
+    /**
+     * 상태(status)로 사용자 수 조회
+     *
+     * @param status 조회할 상태
+     * @return 해당 상태의 사용자 수
+     */
+    long countByStatus(String status);
 }

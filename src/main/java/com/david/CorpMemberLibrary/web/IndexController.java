@@ -73,7 +73,7 @@ public class IndexController {
      *
      * @return 뷰 이름 (templates/posts/posts-save.html)
      */
-    @GetMapping("/posts/save")  // GET /posts/save 요청 처리
+    @GetMapping("/write-posts")  // GET /write-posts 요청 처리
     public String postsSave() {
         // 게시글 작성 폼 페이지로 이동
         return "posts/posts-save";
@@ -141,11 +141,11 @@ public class IndexController {
         return "posts/posts-update";
     }
 
-    @PostMapping("/posts/save")
+    @PostMapping("/write-posts")
     public String save(@Valid PostsSaveRequestDto requestDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
-            return "posts/posts-save";
+            return "posts/posts-list";
         }
 
         postsService.save(requestDto);
