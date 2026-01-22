@@ -6,7 +6,8 @@ import com.david.CorpMemberLibrary.dto.posts.PostsResponseDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsSaveRequestDto;
 import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
 import com.david.CorpMemberLibrary.exception.PostNotFoundException;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,12 @@ public class PostsService {
     private final PostsRepository postsRepository;
     
     @Transactional
-    public Long save(PostsSaveRequestDto requestDto) {
+    public void save(PostsSaveRequestDto requestDto) {
         log.info("게시글 저장 요청 - 제목: {}, 작성자: {}", requestDto.getTitle(), requestDto.getAuthor());
 
         Posts savedPosts = postsRepository.save(requestDto.toEntity());
 
         log.info("게시글 저장 완료 - ID: {}", savedPosts.getId());
-        return savedPosts.getId();
     }
     
     @Transactional

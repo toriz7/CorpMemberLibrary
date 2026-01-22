@@ -64,20 +64,7 @@ public class IndexController {
             return "redirect:/login";
         }
     }
-    
-    /**
-     * 게시글 작성 폼 페이지
-     *
-     * @GetMapping: HTTP GET 요청을 처리
-     * "/posts/save" 경로로 GET 요청이 오면 이 메서드가 실행됨
-     *
-     * @return 뷰 이름 (templates/posts/posts-save.html)
-     */
-    @GetMapping("/write-posts")  // GET /write-posts 요청 처리
-    public String postsSave() {
-        // 게시글 작성 폼 페이지로 이동
-        return "posts/posts-save";
-    }
+
 
     /**
      * 게시글 목록 페이지
@@ -139,6 +126,20 @@ public class IndexController {
 
         // 게시글 수정 폼 페이지로 이동
         return "posts/posts-update";
+    }
+
+    /**
+     * 게시글 작성 폼 페이지
+     *
+     * @GetMapping: HTTP GET 요청을 처리
+     * "/posts/save" 경로로 GET 요청이 오면 이 메서드가 실행됨
+     *
+     * @return 뷰 이름 (templates/posts/posts-save.html)
+     */
+    @GetMapping("/write-posts")  // GET /write-posts 요청 처리
+    public String postsSave() {
+        // 게시글 작성 폼 페이지로 이동
+        return "posts/posts-save";
     }
 
     @PostMapping("/write-posts")
