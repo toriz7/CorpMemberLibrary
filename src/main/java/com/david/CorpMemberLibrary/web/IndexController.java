@@ -7,7 +7,9 @@ import com.david.CorpMemberLibrary.dto.posts.PostsUpdateRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -109,6 +111,7 @@ public class IndexController {
         return "posts/posts-detail";
     }
 
+
     /**
      * 게시글 수정 폼 페이지
      *
@@ -137,7 +140,10 @@ public class IndexController {
      * @return 뷰 이름 (templates/posts/posts-save.html)
      */
     @GetMapping("/write-posts")  // GET /write-posts 요청 처리
-    public String postsSave() {
+    public String postsSave(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername();
+
+        model.addAttribute("author", username);
         // 게시글 작성 폼 페이지로 이동
         return "posts/posts-save";
     }
