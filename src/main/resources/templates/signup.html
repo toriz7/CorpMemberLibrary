@@ -79,17 +79,22 @@
                     <select class="form-select" id="position" th:field="*{position}">
                         <option value="Examiner">검사역</option>
                         <option value="Senior">선임</option>
-                        <option value="Chief">수석</option>
+                        <option value="Principal">수석</option>
+                        <option value="TeamLeader">팀장</option>
+                        <option value="DeptLeader">국장</option>
+                        <option value="Executive">임원</option>
                     </select>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
                 </div>
 
                 <!-- 부서 -->
                 <div class="mb-3">
-                    <label for="dept" class="form-label">부서</label>
-                    <input type="text" class="form-control" id="dept" th:field="*{dept}"
-                           placeholder="부서를 입력하세요"
-                           th:classappend="${#fields.hasErrors('dept')} ? 'is-invalid'">
+                    <label for="dept" class="form-label">부서<span class="required">*</span></label>
+                    <select class="form-select" id="dept" th:field="*{dept}">
+                        <option value="Department1">회계감리1국</option>
+                        <option value="Department2">회계감리2국</option>
+                        <option value="etc">기타</option>
+                    </select>
                     <div class="invalid-feedback" th:if="${#fields.hasErrors('dept')}" th:errors="*{dept}"></div>
                 </div>
 

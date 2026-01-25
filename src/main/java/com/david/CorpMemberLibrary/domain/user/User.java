@@ -54,7 +54,7 @@ public class User {
     /**
      * 사용자 부서
      */
-    @Column(name = "UserDept", length = 20)
+    @Column(name = "UserDept", length = 20, nullable = false)
     private String dept;
 
     /**
