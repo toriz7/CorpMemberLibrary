@@ -1,0 +1,77 @@
+package com.david.AutoSentencing.dto.user;
+
+import com.david.AutoSentencing.domain.user.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * 회원가입 요청 DTO
+ * 회원가입 폼에서 전달되는 데이터를 담는 객체입니다.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+public class SignupRequestDto {
+
+    @NotBlank(message = "사번은 필수입니다")
+    @Size(max = 7, message = "사번은 7자를 초과할 수 없습니다")
+    private String userId;
+
+    @NotBlank(message = "비밀번호는 필수입니다")
+    @Size(min = 4, max = 100, message = "비밀번호는 4자 이상 100자 이하여야 합니다")
+    private String password;
+
+    @NotBlank(message = "비밀번호 확인은 필수입니다")
+    private String passwordConfirm;
+
+    @NotBlank(message = "이름은 필수입니다")
+    @Size(max = 30, message = "이름은 30자를 초과할 수 없습니다")
+    private String name;
+
+    @NotBlank(message = "직책은 필수입니다")
+    @Size(max = 20, message = "직책은 20자를 초과할 수 없습니다")
+    private String position;
+
+    @Size(max = 20, message = "부서는 20자를 초과할 수 없습니다")
+    private String dept;
+
+    @Builder
+    public SignupRequestDto(String userId, String password, String passwordConfirm,
+                            String name, String position, String dept) {
+        this.userId = userId;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+        this.name = name;
+        this.position = position;
+        this.dept = dept;
+    }
+
+    /**
+     * 비밀번호와 비밀번호 확인이 일치하는지 검증
+     * @return 일치하면 true
+     */
+    public boolean isPasswordMatching() {
+        return password != null && password.equals(passwordConfirm);
+    }
+
+    /**
+     * DTO를 Entity로 변환
+     * @param encodedPassword 암호화된 비밀번호
+     * @return User 엔티티
+     */
+    public User toEntity(String encodedPassword) {
+        return User.builder()
+                .userId(userId)
+                .password(encodedPassword)
+                .name(name)
+                .position(position)
+                .dept(dept)
+                .role("USER")
+                .status("PENDING")
+                .build();
+    }
+}

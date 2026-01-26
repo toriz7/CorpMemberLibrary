@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.david'
 version = '0.0.1-SNAPSHOT'
-description = 'searching service of borad members of corporation '
+description = 'Auto Sentencing Service'
 
 java {
 	toolchain {
